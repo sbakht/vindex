@@ -13,11 +13,10 @@ angular.module('vindexApp')
 		$scope.API = null;
 		$scope.videos = VideoFactory.videos;
 		$scope.currentTime = 0;
-		$scope.stamps = [];
+		$scope.currentVideoIndex = 0;
 		$scope.onPlayerReady = function(API) {
 			$scope.API = API;
 		}
-
 
 		$scope.onUpdateTime = function(currentTime, duration) {
 	  		$scope.currentTime = currentTime;
@@ -30,7 +29,7 @@ angular.module('vindexApp')
 
 	  	$scope.createStamp = function() {
 	  		if($scope.newStamp.input.length) {
-				$scope.stamps.push($scope.newStamp);
+				VideoFactory.addStamp($scope.currentVideoIndex, $scope.newStamp);
 				resetInputs();
 			}
 	  	}
@@ -43,7 +42,7 @@ angular.module('vindexApp')
 			autoHide: false,
 			autoHideTime: 3000,
 			autoPlay: false,
-			sources: VideoFactory.videos[0].sources,
+			sources: VideoFactory.videos[$scope.currentVideoIndex].sources,
 			theme: {
 				url: "http://www.videogular.com/styles/themes/default/latest/videogular.css"
 			},
@@ -55,6 +54,7 @@ angular.module('vindexApp')
 		$scope.setVideo = function(index) {
 			$scope.API.stop();
 			$scope.config.sources = VideoFactory.videos[index].sources;
+			$scope.currentVideoIndex = index;
 		};
 
 	  	function secondsToTimeStr(time) {
