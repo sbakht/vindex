@@ -25,7 +25,6 @@
 
 <div class="playlist">
   <ul>
-    <li><a ng-click="setVideo(0)">Pale Blue Dot</a></li>
-    <li><a ng-click="setVideo(1)">Big Buck Bunny</a></li>
+    <li ng-repeat="video in videos track by $index"><a ng-click="setVideo($index)">{{video.title}}</a></li>
   </ul>
 </div>

@@ -28,6 +28,10 @@ angular
         controller: 'MainCtrl',
         controllerAs: 'main'
       })
+      .when('/addvideo', {
+        templateUrl: 'views/addvideo.html',
+        controller: 'AddVideoCtrl',
+      })
       .otherwise({
         redirectTo: '/'
       });

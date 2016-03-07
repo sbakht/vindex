@@ -11,6 +11,7 @@ angular.module('vindexApp')
   .controller('MainCtrl', function ($scope, VideoFactory) {
 
 		$scope.API = null;
+		$scope.videos = VideoFactory.videos;
 		$scope.onPlayerReady = function(API) {
 			$scope.API = API;
 		}

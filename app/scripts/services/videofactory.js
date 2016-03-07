@@ -31,6 +31,7 @@ angular.module('vindexApp')
 
     var videos = [
       {
+        title: "Galaxy",
         sources: [
           {src: $sce.trustAsResourceUrl("http://static.videogular.com/assets/videos/videogular.mp4"), type: "video/mp4"},
           {src: $sce.trustAsResourceUrl("http://static.videogular.com/assets/videos/videogular.webm"), type: "video/webm"},
@@ -38,6 +39,7 @@ angular.module('vindexApp')
         ]
       },
       {
+        title: "Bunny Fufu",
         sources: [
           {src: $sce.trustAsResourceUrl("http://static.videogular.com/assets/videos/big_buck_bunny_720p_h264.mov"), type: "video/mp4"},
           {src: $sce.trustAsResourceUrl("http://static.videogular.com/assets/videos/big_buck_bunny_720p_stereo.ogg"), type: "video/ogg"}
@@ -45,8 +47,14 @@ angular.module('vindexApp')
       }
     ];
 
+    var addVideo = function(title, url, type) {
+        var video = {title: title, sources: [ { src: $sce.trustAsResourceUrl(url), type: "video/" + type } ] };
+        videos.push(video);
+    }
+
     return {
       videos: videos,
+      addVideo: addVideo
       // getPolls: getPolls,
       // addPoll: addPoll,
       // removePoll: removePoll
