@@ -91,3 +91,35 @@ body {
 #new-stamp {
   margin-top: 5%;
 }
+
+
+.stamp {
+  background-color: #F7F7F7;
+  margin-top: 2px;
+  padding: 6px;
+}
+
+.stamp:hover {
+  background-color:#EAEAF8;
+}
+
+.stamp:hover .delete {
+  display:block;
+}
+
+.stamp .delete {
+  display:none;
+  float:right;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+
+.stamp-time{
+  color:blue;
+  cursor: pointer;
+}
+
+.stamp-input {
+  float:right;
+  padding-right:10px;
+}

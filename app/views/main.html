@@ -25,11 +25,8 @@
   </div>
 
   <div class="col-md-4">
-    <div class="playlist">
-      <ul>
-        <li ng-repeat="video in videos track by $index"><a ng-click="setVideo($index)">{{video.title}}</a></li>
-      </ul>
-    </div>
+    <stamp-list video-index="currentVideoIndex"></stamp-list>
+
   </div>
 
 </div>
@@ -47,7 +44,11 @@
     </form>
   </div>
   <div class="col-md-offset-4 col-md-4">
-    <stamp-list video-index="currentVideoIndex"></stamp-list>
+    <div class="playlist">
+      <ul>
+        <li ng-repeat="video in videos track by $index"><a ng-click="setVideo($index)">{{video.title}}</a></li>
+      </ul>
+    </div>
   </div>
 </div>
 
