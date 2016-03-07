@@ -8,7 +8,7 @@
  * Controller of the vindexApp
  */
 angular.module('vindexApp')
-  .controller('MainCtrl', function ($scope, VideoFactory) {
+  .controller('MainCtrl', function ($scope, VideoFactory, hotkeys) {
 
 		$scope.API = null;
 		$scope.videos = VideoFactory.videos;
@@ -57,6 +57,57 @@ angular.module('vindexApp')
 			$scope.currentVideoIndex = index;
 		};
 
+	  	hotkeys.add({
+		    combo: 'alt+up',
+		    description: '+1 to creating stamp time',
+		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+		    callback: function() {
+		      var videoLength = $scope.API.totalTime;
+		      var seconds = timeStrToSeconds($scope.newStamp.time) + 1;
+		      if(seconds <= videoLength) {
+		      	$scope.newStamp.time = secondsToTimeStr(seconds);
+		      }
+		    }
+		});
+
+	  	hotkeys.add({
+		    combo: 'alt+down',
+		    description: '-1 to creating stamp time',
+		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+		    callback: function() {
+		      var seconds = timeStrToSeconds($scope.newStamp.time) - 1;
+		      if(seconds >= 0) {
+		      	$scope.newStamp.time = secondsToTimeStr(seconds);
+		  	  }
+		    }
+		});
+
+	  	hotkeys.add({
+		    combo: 'shift+up',
+		    description: '+5 to creating stamp time',
+		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+		    callback: function() {
+		      var videoLength = $scope.API.totalTime;
+		      var seconds = timeStrToSeconds($scope.newStamp.time) + 5;
+		      if(seconds <= videoLength) {
+		      	$scope.newStamp.time = secondsToTimeStr(seconds);
+		      }
+		    }
+		});
+
+	  	hotkeys.add({
+		    combo: 'shift+down',
+		    description: '-5 to creating stamp time',
+		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+		    callback: function() {
+		      var seconds = timeStrToSeconds($scope.newStamp.time) - 5;
+		      if(seconds >= 0) {
+		      	$scope.newStamp.time = secondsToTimeStr(seconds);
+		  	  }
+		    }
+		});
+
+
 	  	function secondsToTimeStr(time) {
 	  		var seconds = Math.floor(time % 60);
 	  		var minutes = Math.floor(time / 60);
@@ -67,6 +118,12 @@ angular.module('vindexApp')
 	  			minutes = "0" + minutes;
 	  		}
 	  		return minutes + ":" + seconds; 
+	  	}
+
+	  	function timeStrToSeconds(time) {
+	  		var minutes = time.match(/\d+/)[0];
+	  		var seconds = time.match(/\:(\d+)/)[1];
+	  		return parseInt(minutes) * 60 + parseInt(seconds);
 	  	}
 
   });
