@@ -30,6 +30,7 @@ module.exports = function(config) {
       'bower_components/angular-sanitize/angular-sanitize.js',
       'bower_components/angular-touch/angular-touch.js',
       'bower_components/angular-mocks/angular-mocks.js',
+      'bower_components/videogular/videogular.js',
       // endbower
       'app/scripts/**/*.js',
       'test/mock/**/*.js',
