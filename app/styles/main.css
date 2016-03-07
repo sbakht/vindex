@@ -123,3 +123,7 @@ body {
   float:right;
   padding-right:10px;
 }
+
+#no-stamps, #hint {
+  font-style: italic;
+}

@@ -58,10 +58,13 @@ angular.module('vindexApp')
       videos[index].timestamps.push(stamp);
     } 
 
-    var removeStamp = function(index, stamp) {
-      var video = videos[index];
-      if(video && video.timestamps.indexOf(stamp) > -1) {
-        video.timestamps.splice(index, 1);
+    var removeStamp = function(videoIndex, stamp) {
+      var video = videos[videoIndex];
+      if(video) {
+        var stampIndex = video.timestamps.indexOf(stamp);
+        if(stampIndex > -1) {
+          video.timestamps.splice(stampIndex, 1);
+        }
       }
     }
 

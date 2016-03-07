@@ -12,7 +12,8 @@ angular.module('vindexApp')
       templateUrl: 'views/templates/stamplist.html',
       restrict: 'E',
       scope : {
-      	videoIndex: "="
+      	videoIndex: "=",
+      	api: "="
       },
       link: function postLink(scope, element, attrs) {
       	scope.stamps = VideoFactory.videos[scope.videoIndex].timestamps;
@@ -28,7 +29,8 @@ angular.module('vindexApp')
       	}
 
       	scope.seek = function(stamp) {
-      		scope.player.seekTo(timeStrToSeconds(stamp.time));
+      		scope.api.seekTime(timeStrToSeconds(stamp.time));
+      		scope.api.play();
       	}
 
 	  	function timeStrToSeconds(time) {
