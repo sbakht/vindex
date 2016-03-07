@@ -16,6 +16,9 @@ angular.module('vindexApp')
 			$scope.API = API;
 		}
 
+
+		$scope.newStamp = { time: "00:00", input: ""};
+
 		$scope.config = {
 			autoHide: false,
 			autoHideTime: 3000,
