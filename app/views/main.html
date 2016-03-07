@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-8">
-    <videogular vg-player-ready="onPlayerReady($API)" vg-theme="config.theme.url">
+    <videogular vg-player-ready="onPlayerReady($API)" vg-update-time="onUpdateTime($currentTime,$duration)" vg-theme="config.theme.url">
       <vg-media vg-src="config.sources"
           vg-tracks="config.tracks">
       </vg-media>
@@ -40,7 +40,7 @@
 
       <div class="input-group">
         <span id="new-stamp-time" class="input-group-addon" id="basic-addon1">{{newStamp.time}}</span>
-        <input class="form-control" id="new-stamp-input" ng-model="newStamp.input" ng-keypress="keypress()" type="text" autocomplete="off" />
+        <input class="form-control" id="new-stamp-input" ng-model="newStamp.input" type="text" autocomplete="off" />
       </div>
 
       <input id="new-stamp-submit" class="btn btn-primary" type="submit" value="Create Timestamp" />
