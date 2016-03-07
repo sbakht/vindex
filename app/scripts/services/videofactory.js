@@ -56,12 +56,20 @@ angular.module('vindexApp')
 
     var addStamp = function(index, stamp) {
       videos[index].timestamps.push(stamp);
+    } 
+
+    var removeStamp = function(index, stamp) {
+      var video = videos[index];
+      if(video && video.timestamps.indexOf(stamp) > -1) {
+        video.timestamps.splice(index, 1);
+      }
     }
 
     return {
       videos: videos,
       addVideo: addVideo,
-      addStamp: addStamp
+      addStamp: addStamp,
+      removeStamp: removeStamp
       // getPolls: getPolls,
       // addPoll: addPoll,
       // removePoll: removePoll

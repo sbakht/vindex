@@ -23,6 +23,20 @@ angular.module('vindexApp')
           }
         }, true);
 
+      	scope.remove = function(stamp) {
+      		VideoFactory.removeStamp(scope.videoIndex, stamp);
+      	}
+
+      	scope.seek = function(stamp) {
+      		scope.player.seekTo(timeStrToSeconds(stamp.time));
+      	}
+
+	  	function timeStrToSeconds(time) {
+	  		var minutes = time.match(/\d+/)[0];
+	  		var seconds = time.match(/\:(\d+)/)[1];
+	  		return parseInt(minutes) * 60 + parseInt(seconds);
+	  	}
+
       }
     };
   });
