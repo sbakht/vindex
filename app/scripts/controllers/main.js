@@ -30,6 +30,7 @@ angular.module('vindexApp')
 	  	$scope.createStamp = function() {
 	  		if($scope.newStamp.input.length) {
 				VideoFactory.addStamp($scope.currentVideoIndex, $scope.newStamp);
+				createTag();
 				resetInputs();
 			}
 	  	}
@@ -56,6 +57,41 @@ angular.module('vindexApp')
 			$scope.config.sources = VideoFactory.videos[index].sources;
 			$scope.currentVideoIndex = index;
 		};
+
+	    $scope.tags = [
+		    { label: 'Joe'},
+		    { label: 'Mike'},
+		    { label: 'Diane'}
+		];
+
+		function createTag() {
+		    var regex = /@(\w+)/g;
+		    var matches = getMatches($scope.newStamp.input, regex, 1)
+		    var match;
+		    var exists;
+	    	matches.forEach(function(match) {
+	      		exists = false;
+	      		$scope.tags.forEach(function(p) {
+		        if(p.label.toLowerCase() == match.toLowerCase()) {
+		            exists = true;
+		            return;
+		        }
+		      	});
+		      	if(!exists) {
+		        	$scope.tags.push({label: match});
+		      	}
+	    	});
+	   }
+  
+		function getMatches(string, regex, index) {
+			index || (index = 1); // default to the first capturing group
+		    var matches = [];
+	   	    var match;
+			while (match = regex.exec(string)) {
+			    matches.push(match[index]);
+			}
+			return matches;
+		}
 
 	  	hotkeys.add({
 		    combo: 'alt+up',

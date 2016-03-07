@@ -17,10 +17,12 @@ angular.module('vindexApp')
       },
       link: function postLink(scope, element, attrs) {
       	scope.stamps = VideoFactory.videos[scope.videoIndex].timestamps;
+      	scope.title = VideoFactory.videos[scope.videoIndex].title;
 
         scope.$watch('videoIndex', function(newValue, oldValue) {
           if(newValue !== oldValue) {
             scope.stamps = VideoFactory.videos[scope.videoIndex].timestamps;
+            scope.title = VideoFactory.videos[scope.videoIndex].title;
           }
         }, true);
 

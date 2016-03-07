@@ -37,7 +37,7 @@
 
       <div class="input-group">
         <span id="new-stamp-time" class="input-group-addon" id="basic-addon1">{{newStamp.time}}</span>
-        <input class="form-control" id="new-stamp-input" ng-model="newStamp.input" type="text" autocomplete="off" />
+        <input class="form-control" id="new-stamp-input" ng-model="newStamp.input" type="text" autocomplete="off" mentio mentio-typed-text="typedTerm"mentio-items="tags | filter:label:typedTerm" />
       </div>
 
       <input id="new-stamp-submit" class="btn btn-primary" type="submit" value="Create Timestamp" />
@@ -51,4 +51,9 @@
     </div>
   </div>
 </div>
+
+  <h4>Tags</h4>
+  <ul>
+    <li ng-repeat="tag in tags" ng-click="showTagDetails(tag.label)">{{tag.label}}</li>
+  </ul>
 

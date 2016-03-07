@@ -1,4 +1,5 @@
 <div>
+	<h3>{{title}}</h3>
 	<div class="stamp" ng-repeat="stamp in stamps | orderBy: 'time'">
 		<span class="stamp-time" ng-click="seek(stamp)">{{stamp.time}}</span>
 		<span class="delete" ng-click="remove(stamp)">X</span>

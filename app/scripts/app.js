@@ -20,7 +20,8 @@ angular
     "com.2fdevs.videogular.plugins.controls",
     "com.2fdevs.videogular.plugins.overlayplay",
     "com.2fdevs.videogular.plugins.poster",
-    "cfp.hotkeys"
+    "cfp.hotkeys",
+    "mentio"
   ])
   .config(function ($routeProvider) {
     $routeProvider

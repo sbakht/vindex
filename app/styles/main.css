@@ -127,3 +127,7 @@ body {
 #no-stamps, #hint {
   font-style: italic;
 }
+
+h3 {
+  margin-top: 0;
+}
