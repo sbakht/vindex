@@ -22,7 +22,7 @@ angular.module('vindexApp')
       		scope.showTagDetails()(removeMention(tag));
       	};
 
-		//remove @
+		    //remove @
       	function removeMention(str) {
       		return str.substring(1);
       	}

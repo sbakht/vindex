@@ -1,9 +1,10 @@
 <div>
-	<h3>{{title}}</h3>
+	<!-- <h3>{{title}}</h3> -->
 	<div class="stamp" ng-repeat="stamp in stamps | orderBy: 'time'">
 		<span class="stamp-time" ng-click="seek(stamp)">{{stamp.time}}</span>
 		<span class="delete" ng-click="remove(stamp)">X</span>
 		<stamp-description description="stamp.input" show-tag-details="showTagDetails()"></stamp-description>
+		<p>{{stamp.notes}}</p>
 	</div>
 	<span id="no-stamps" ng-if="!stamps.length">No timestamps created</span>
 </div>

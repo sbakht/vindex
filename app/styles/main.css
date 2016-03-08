@@ -137,8 +137,17 @@ h3 {
 }
 
 #tag-occurences #input-tag {
-  border: 0px solid #ccc;
+  border: 1px solid rgba(105, 98, 98, 0.22);
   display: inline-block;
   font-size: 24px;
   width:50%;
+}
+
+select {
+  font-size: 24px;
+  height: 44px;
+}
+
+.stamp p {
+  white-space:pre-wrap;
 }

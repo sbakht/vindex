@@ -25,6 +25,7 @@
   </div>
 
   <div class="col-md-4">
+    <select class="form-control" ng-options="video.title for video in videos track by video.index" ng-model="activeVideo" ng-change="setVideo(activeVideo.index)"></select>
     <stamp-list video-index="currentVideoIndex" api="API" show-tag-details="showTagDetails"></stamp-list>
 
   </div>
@@ -39,16 +40,12 @@
         <span id="new-stamp-time" class="input-group-addon" id="basic-addon1">{{newStamp.time}}</span>
         <input class="form-control" id="new-stamp-input" ng-model="newStamp.input" type="text" autocomplete="off" mentio mentio-typed-text="typedTerm"mentio-items="tags | filter:label:typedTerm" />
       </div>
-
+      <textarea bullets id="new-stamp-notes" class="form-control" ng-model="newStamp.notes" rows="3" placeholder="Enter notes here..."></textarea>
       <input id="new-stamp-submit" class="btn btn-primary" type="submit" value="Create Timestamp" />
     </form>
   </div>
 
-  <div class="col-md-4">
-      <select name="mySelect" id="mySelect" ng-options="video.title for video in videos track by video.index" ng-model="activeVideo" ng-change="changedSelectedVideo()"></select>
-  </div>
-
-  <div class="col-md-4" id="tag-occurences">
+  <div class="col-md-offset-4 col-md-4" id="tag-occurences">
     <h3>All instances of</h3>
     <input id="input-tag" class="form-control" type="text" ng-model="inputActiveTag" ng-change="showTagDetailsIfIsValidTag()" autocomplete="off" mentio mentio-typed-text="typedTerm"mentio-items="tags | filter:label:typedTerm" />
     <div ng-repeat="video in activeTagStamps">

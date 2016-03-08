@@ -17,6 +17,7 @@ angular.module('vindexApp')
 		$scope.activeTagStamps = null;
 		$scope.activeTag = null;
 		$scope.inputActiveTag = "";
+		$scope.newStamp = { time: "00:00", input: "", notes: ""};
 		$scope.activeVideo = VideoFactory.videos[$scope.currentVideoIndex];
 		$scope.onPlayerReady = function(API) {
 			$scope.API = API;
@@ -28,8 +29,6 @@ angular.module('vindexApp')
 	  			$scope.newStamp.time = secondsToTimeStr(currentTime);
 	  		}
 		}
-
-		$scope.newStamp = { time: "00:00", input: ""};
 
 	  	$scope.createStamp = function() {
 	  		if($scope.newStamp.input.length) {
@@ -44,7 +43,7 @@ angular.module('vindexApp')
 	  	}
 
   	  	function resetInputs() {
-  			$scope.newStamp = {time: secondsToTimeStr($scope.currentTime), input: ""};
+  			$scope.newStamp = {time: secondsToTimeStr($scope.currentTime), input: "", notes: ""};
   		}
 
 
@@ -111,14 +110,10 @@ angular.module('vindexApp')
 			$scope.activeVideo = VideoFactory.videos[$scope.currentVideoIndex];
 		};
 
-		$scope.changedSelectedVideo = function() {
-			$scope.setVideo($scope.selectedVideo.index);
-		}
-
 	    $scope.tags = [
-		    { label: 'Joe'},
-		    { label: 'Mike'},
-		    { label: 'Diane'}
+		    { label: 'joe'},
+		    { label: 'mike'},
+		    { label: 'diane'}
 		];
 
 		function createTag() {
@@ -129,7 +124,7 @@ angular.module('vindexApp')
 	    	matches.forEach(function(match) {
 	      		exists = false;
 	      		$scope.tags.forEach(function(p) {
-		        if(p.label.toLowerCase() == match.toLowerCase()) {
+		        if(p.label == match) {
 		            exists = true;
 		            return;
 		        }
