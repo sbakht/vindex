@@ -45,11 +45,7 @@
   </div>
 
   <div class="col-md-4">
-    <div class="playlist">
-      <ul>
-        <li ng-repeat="video in videos track by $index"><a ng-click="setVideo($index)">{{video.title}}</a></li>
-      </ul>
-    </div>
+      <select name="mySelect" id="mySelect" ng-options="video.title for video in videos track by video.index" ng-model="activeVideo" ng-change="changedSelectedVideo()"></select>
   </div>
 
   <div class="col-md-4" id="tag-occurences">

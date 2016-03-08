@@ -17,6 +17,7 @@ angular.module('vindexApp')
 		$scope.activeTagStamps = null;
 		$scope.activeTag = null;
 		$scope.inputActiveTag = "";
+		$scope.activeVideo = VideoFactory.videos[$scope.currentVideoIndex];
 		$scope.onPlayerReady = function(API) {
 			$scope.API = API;
 		}
@@ -107,7 +108,12 @@ angular.module('vindexApp')
 			$scope.API.stop();
 			$scope.config.sources = VideoFactory.videos[index].sources;
 			$scope.currentVideoIndex = index;
+			$scope.activeVideo = VideoFactory.videos[$scope.currentVideoIndex];
 		};
+
+		$scope.changedSelectedVideo = function() {
+			$scope.setVideo($scope.selectedVideo.index);
+		}
 
 	    $scope.tags = [
 		    { label: 'Joe'},
