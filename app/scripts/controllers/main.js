@@ -35,6 +35,9 @@ angular.module('vindexApp')
 				VideoFactory.addStamp($scope.currentVideoIndex, $scope.newStamp);
 				createTag();
 				resetInputs();
+				if($scope.activeTag) { //re-render tag occurences
+					$scope.showTagDetails($scope.activeTag);
+				}
 			}
 	  	}
 
