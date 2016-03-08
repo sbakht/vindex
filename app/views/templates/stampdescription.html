@@ -1,0 +1,6 @@
+<span class="stamp-input">
+	<span ng-repeat="word in descriptionArray">
+		<span ng-if="word[0] !== '@'">{{word}} </span>
+		<span class="tag" ng-click="callback(word)" ng-if="word[0] === '@'">{{word}} </span>
+	</span>
+</span>

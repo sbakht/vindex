@@ -13,7 +13,8 @@ angular.module('vindexApp')
       restrict: 'E',
       scope : {
       	videoIndex: "=",
-      	api: "="
+      	api: "=",
+        showTagDetails: "&"
       },
       link: function postLink(scope, element, attrs) {
       	scope.stamps = VideoFactory.videos[scope.videoIndex].timestamps;
@@ -35,11 +36,20 @@ angular.module('vindexApp')
       		scope.api.play();
       	}
 
-	  	function timeStrToSeconds(time) {
-	  		var minutes = time.match(/\d+/)[0];
-	  		var seconds = time.match(/\:(\d+)/)[1];
-	  		return parseInt(minutes) * 60 + parseInt(seconds);
-	  	}
+        scope.callback = function(tag) {
+          scope.showTagDetails()(removeMention(tag));
+        };
+
+  	  	function timeStrToSeconds(time) {
+  	  		var minutes = time.match(/\d+/)[0];
+  	  		var seconds = time.match(/\:(\d+)/)[1];
+  	  		return parseInt(minutes) * 60 + parseInt(seconds);
+  	  	}
+
+          //remove @
+        function removeMention(str) {
+          return str.substring(1);
+        }
 
       }
     };

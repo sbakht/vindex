@@ -15,6 +15,7 @@ angular.module('vindexApp')
 		$scope.currentTime = 0;
 		$scope.currentVideoIndex = 0;
 		$scope.activeTagStamps = null;
+		$scope.activeTag = null;
 		$scope.onPlayerReady = function(API) {
 			$scope.API = API;
 		}
@@ -56,6 +57,7 @@ angular.module('vindexApp')
   		}
 
 		$scope.showTagDetails = function(tag) {
+			$scope.activeTag = tag;
 			$scope.activeTagStamps = VideoFactory.videos.map(function(video) {
 				var stamps = video.timestamps.filter(function(timestamp) {
 					return timestamp.tags.indexOf(tag) > -1;

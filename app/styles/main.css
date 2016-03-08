@@ -114,7 +114,7 @@ body {
   cursor: pointer;
 }
 
-.stamp-time{
+.stamp-time, .tag{
   color:blue;
   cursor: pointer;
 }
