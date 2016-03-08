@@ -50,9 +50,12 @@
     <input id="input-tag" class="form-control" type="text" ng-model="inputActiveTag" ng-change="showTagDetailsIfIsValidTag()" autocomplete="off" mentio mentio-typed-text="typedTerm"mentio-items="tags | filter:label:typedTerm" />
     <div ng-repeat="video in activeTagStamps">
       <h3>{{video.title}}</h3>
-      <div class="stamp" ng-repeat="stamp in video.timestamps | orderBy: 'time'">
-        <span class="stamp-time" ng-click="seek(video.index, stamp)">{{stamp.time}}</span>
+      <div class="stamp" ng-repeat="stamp in video.timestamps | orderBy: 'time'" ng-click="showNotes = ! showNotes">
+        <span class="stamp-time" ng-click="seek(video.index, stamp); $event.stopPropagation()">{{stamp.time}}</span>
+        <span class="show-notes glyphicon glyphicon glyphicon-chevron-down" ng-hide="showNotes || !stamp.notes.length" aria-hidden="true"></span>
+        <span class="hide-notes glyphicon glyphicon glyphicon-chevron-up" ng-show="showNotes && stamp.notes.length" aria-hidden="true"></span>
         <stamp-description description="stamp.input" show-tag-details="showTagDetails"></stamp-description>
+        <p class="notes" ng-show="showNotes && stamp.notes.length">{{stamp.notes}}</p>
       </div>
     </div>
   </div>

@@ -97,6 +97,7 @@ body {
   background-color: #F7F7F7;
   margin-top: 2px;
   padding: 6px;
+  cursor: pointer;
 }
 
 .stamp:hover {
@@ -148,6 +149,10 @@ select {
   height: 44px;
 }
 
-.stamp p {
+p.notes {
   white-space:pre-wrap;
+}
+
+.show-notes, .hide-notes {
+  float:right;
 }

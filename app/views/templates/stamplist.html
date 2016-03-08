@@ -1,10 +1,12 @@
 <div>
 	<!-- <h3>{{title}}</h3> -->
-	<div class="stamp" ng-repeat="stamp in stamps | orderBy: 'time'">
-		<span class="stamp-time" ng-click="seek(stamp)">{{stamp.time}}</span>
+	<div class="stamp" ng-repeat="stamp in stamps | orderBy: 'time'" ng-click="showNotes = ! showNotes">
+		<span class="stamp-time" ng-click="seek(stamp); $event.stopPropagation()">{{stamp.time}}</span>
 		<span class="delete" ng-click="remove(stamp)">X</span>
+		<span class="show-notes glyphicon glyphicon glyphicon-chevron-down" ng-hide="showNotes || !stamp.notes.length" aria-hidden="true"></span>
+		<span class="hide-notes glyphicon glyphicon glyphicon-chevron-up" ng-show="showNotes && stamp.notes.length" aria-hidden="true"></span>
 		<stamp-description description="stamp.input" show-tag-details="showTagDetails()"></stamp-description>
-		<p>{{stamp.notes}}</p>
+		<p class="notes" ng-show="showNotes && stamp.notes.length">{{stamp.notes}}</p>
 	</div>
 	<span id="no-stamps" ng-if="!stamps.length">No timestamps created</span>
 </div>
