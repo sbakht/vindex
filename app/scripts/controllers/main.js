@@ -8,12 +8,13 @@
  * Controller of the vindexApp
  */
 angular.module('vindexApp')
-  .controller('MainCtrl', function ($scope, VideoFactory, hotkeys) {
+  .controller('MainCtrl', function ($scope, VideoFactory, hotkeys, $timeout) {
 
 		$scope.API = null;
 		$scope.videos = VideoFactory.videos;
 		$scope.currentTime = 0;
 		$scope.currentVideoIndex = 0;
+		$scope.activeTagStamps = null;
 		$scope.onPlayerReady = function(API) {
 			$scope.API = API;
 		}
@@ -29,6 +30,7 @@ angular.module('vindexApp')
 
 	  	$scope.createStamp = function() {
 	  		if($scope.newStamp.input.length) {
+		    	$scope.newStamp.tags = getMatches($scope.newStamp.input, /@(\w+)/g, 1);
 				VideoFactory.addStamp($scope.currentVideoIndex, $scope.newStamp);
 				createTag();
 				resetInputs();
@@ -38,6 +40,34 @@ angular.module('vindexApp')
   	  	function resetInputs() {
   			$scope.newStamp = {time: secondsToTimeStr($scope.currentTime), input: ""};
   		}
+
+
+  		$scope.seek = function(index, stamp) {
+  			if($scope.currentVideoIndex === index) {
+	      		$scope.API.seekTime(timeStrToSeconds(stamp.time));
+	      		$scope.API.play();
+  			}else{
+	  			$scope.setVideo(index);
+  				$timeout(function() {
+  					$scope.API.seekTime(timeStrToSeconds(stamp.time));
+  					$scope.API.play();
+  				}, 50);
+			}
+  		}
+
+		$scope.showTagDetails = function(tag) {
+			$scope.activeTagStamps = VideoFactory.videos.map(function(video) {
+				var stamps = video.timestamps.filter(function(timestamp) {
+					return timestamp.tags.indexOf(tag) > -1;
+				});
+
+				if(stamps.length) {
+					return [ {index: video.index, title: video.title, timestamps: stamps}]
+				}
+				return [];
+
+			}).concatAll();  
+		}
 
 		$scope.config = {
 			autoHide: false,
@@ -161,5 +191,35 @@ angular.module('vindexApp')
 	  		var seconds = time.match(/\:(\d+)/)[1];
 	  		return parseInt(minutes) * 60 + parseInt(seconds);
 	  	}
+
+	  	Array.prototype.concatAll = function() {
+			var results = [];
+			this.forEach(function(subArray) {
+				results.push.apply(results, subArray);
+			});
+
+			return results;
+		};
+		  
+		Array.prototype.filter = function(predicateFunction) {
+			var results = [];
+			this.forEach(function(itemInArray) {
+			  if (predicateFunction(itemInArray)) {
+				results.push(itemInArray);
+			  }
+			});
+
+			return results;
+		};
+		  
+		Array.prototype.map = function(projectionFunction) {
+			var results = [];
+			this.forEach(function(itemInArray) {
+				results.push(projectionFunction(itemInArray));
+
+			});
+
+			return results;
+		};
 
   });
