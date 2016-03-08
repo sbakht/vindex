@@ -52,8 +52,9 @@
     </div>
   </div>
 
-  <div class="col-md-4">
-    <h3>All instances of @{{activeTag}}</h3>
+  <div class="col-md-4" id="tag-occurences">
+    <h3>All instances of</h3>
+    <input id="input-tag" class="form-control" type="text" ng-model="inputActiveTag" ng-change="showTagDetailsIfIsValidTag()" autocomplete="off" mentio mentio-typed-text="typedTerm"mentio-items="tags | filter:label:typedTerm" />
     <div ng-repeat="video in activeTagStamps">
       <h3>{{video.title}}</h3>
       <div class="stamp" ng-repeat="stamp in video.timestamps | orderBy: 'time'">
@@ -63,8 +64,3 @@
     </div>
   </div>
 </div>
-
-<h4>Tags</h4>
-<ul>
-  <li class="tag" ng-repeat="tag in tags" ng-click="showTagDetails(tag.label)">@{{tag.label}}</li>
-</ul>

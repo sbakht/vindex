@@ -131,3 +131,14 @@ body {
 h3 {
   margin-top: 0;
 }
+
+#tag-occurences h3 {
+  display: inline-block;
+}
+
+#tag-occurences #input-tag {
+  border: 0px solid #ccc;
+  display: inline-block;
+  font-size: 24px;
+  width:50%;
+}

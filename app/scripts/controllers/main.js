@@ -16,6 +16,7 @@ angular.module('vindexApp')
 		$scope.currentVideoIndex = 0;
 		$scope.activeTagStamps = null;
 		$scope.activeTag = null;
+		$scope.inputActiveTag = "";
 		$scope.onPlayerReady = function(API) {
 			$scope.API = API;
 		}
@@ -61,6 +62,7 @@ angular.module('vindexApp')
 
 		$scope.showTagDetails = function(tag) {
 			$scope.activeTag = tag;
+			$scope.inputActiveTag = "@" + tag;
 			$scope.activeTagStamps = VideoFactory.videos.map(function(video) {
 				var stamps = video.timestamps.filter(function(timestamp) {
 					return timestamp.tags.indexOf(tag) > -1;
@@ -72,6 +74,20 @@ angular.module('vindexApp')
 				return [];
 
 			}).concatAll();  
+		}
+
+		$scope.showTagDetailsIfIsValidTag = function() {
+			// $scope.inputActiveTag = $scope.inputActiveTag.substring(1); //remove @
+			var temp = $scope.inputActiveTag;
+			if(temp[0] === "@") {
+				temp = temp.substring(1);
+			}
+			$scope.tags.forEach(function(tag) {
+				if(tag.label === temp) {
+					$scope.showTagDetails(temp);
+					return;
+				}
+			});
 		}
 
 		$scope.config = {
