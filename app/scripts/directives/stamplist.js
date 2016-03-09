@@ -17,13 +17,20 @@ angular.module('vindexApp')
         showTagDetails: "&"
       },
       link: function postLink(scope, element, attrs) {
-      	scope.stamps = VideoFactory.videos[scope.videoIndex].timestamps;
-      	scope.title = VideoFactory.videos[scope.videoIndex].title;
+        var key, record;
+        var videos = VideoFactory.videos;
+
+        videos.$loaded().then(function(result) {
+          key = videos.$keyAt(0);
+          scope.video = videos.$getRecord(key);
+        }, function(error) {
+          console.log("error: " + error);
+        });
 
         scope.$watch('videoIndex', function(newValue, oldValue) {
           if(newValue !== oldValue) {
-            scope.stamps = VideoFactory.videos[scope.videoIndex].timestamps;
-            scope.title = VideoFactory.videos[scope.videoIndex].title;
+            key = videos.$keyAt(scope.videoIndex);
+            scope.video = videos.$getRecord(key);
           }
         }, true);
 

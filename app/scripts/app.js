@@ -21,7 +21,8 @@ angular
     "com.2fdevs.videogular.plugins.overlayplay",
     "com.2fdevs.videogular.plugins.poster",
     "cfp.hotkeys",
-    "mentio"
+    "mentio",
+    'firebase'
   ])
   .config(function ($routeProvider) {
     $routeProvider

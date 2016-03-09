@@ -8,7 +8,7 @@
  * Controller of the vindexApp
  */
 angular.module('vindexApp')
-  .controller('MainCtrl', function ($scope, VideoFactory, hotkeys, $timeout) {
+  .controller('MainCtrl', function ($scope, VideoFactory, hotkeys, $timeout, $location) {
 
 		$scope.API = null;
 		$scope.videos = VideoFactory.videos;
@@ -18,7 +18,46 @@ angular.module('vindexApp')
 		$scope.activeTag = null;
 		$scope.inputActiveTag = "";
 		$scope.newStamp = { time: "00:00", input: "", notes: ""};
-		$scope.activeVideo = VideoFactory.videos[$scope.currentVideoIndex];
+	    $scope.tags = [];
+
+		VideoFactory.tags.$loaded().then(function(result) {
+			var i = 0;
+			while(true) {
+				var record = VideoFactory.tags.$getRecord(VideoFactory.tags.$keyAt(i));
+				if(record) {
+					$scope.tags.push({ label: record.label});
+				}else{
+					break;
+				}
+				i++;
+			}
+			console.log($scope.tags);
+		});
+
+	    $scope.videos.$loaded().then(function(result) {
+	      	var key = $scope.videos.$keyAt($scope.currentVideoIndex);
+	      	var record = $scope.videos.$getRecord(key);
+			$scope.activeVideo = record;
+			if(!record) {
+				$location.path("/addvideo");
+			}else{
+	      		$scope.config = {
+					autoHide: false,
+					autoHideTime: 3000,
+					autoPlay: false,
+					sources: $scope.activeVideo.sources,
+					theme: {
+						url: "http://www.videogular.com/styles/themes/default/latest/videogular.css"
+					},
+					plugins: {
+						poster: "http://www.videogular.com/assets/images/videogular.png"
+					}
+				};
+			}
+	    }, function(error) {
+	      console.log("error: " + error);
+	    });
+
 		$scope.onPlayerReady = function(API) {
 			$scope.API = API;
 		}
@@ -63,8 +102,14 @@ angular.module('vindexApp')
 		$scope.showTagDetails = function(tag) {
 			$scope.activeTag = tag;
 			$scope.inputActiveTag = "@" + tag;
-			$scope.activeTagStamps = VideoFactory.videos.map(function(video) {
+			$scope.activeTagStamps = $scope.videos.map(function(video) {
+				if(!video.timestamps) {
+					return [];
+				}
 				var stamps = video.timestamps.filter(function(timestamp) {
+					if(!timestamp.tags) {
+						return false;
+					}
 					return timestamp.tags.indexOf(tag) > -1;
 				});
 
@@ -90,31 +135,13 @@ angular.module('vindexApp')
 			});
 		}
 
-		$scope.config = {
-			autoHide: false,
-			autoHideTime: 3000,
-			autoPlay: false,
-			sources: VideoFactory.videos[$scope.currentVideoIndex].sources,
-			theme: {
-				url: "http://www.videogular.com/styles/themes/default/latest/videogular.css"
-			},
-			plugins: {
-				poster: "http://www.videogular.com/assets/images/videogular.png"
-			}
-		};
-
 		$scope.setVideo = function(index) {
+			console.log(index);
 			$scope.API.stop();
-			$scope.config.sources = VideoFactory.videos[index].sources;
+			$scope.config.sources = $scope.videos.$getRecord($scope.videos.$keyAt(index)).sources;
 			$scope.currentVideoIndex = index;
 			$scope.activeVideo = VideoFactory.videos[$scope.currentVideoIndex];
 		};
-
-	    $scope.tags = [
-		    { label: 'joe'},
-		    { label: 'mike'},
-		    { label: 'diane'}
-		];
 
 		function createTag() {
 		    var regex = /@(\w+)/g;
@@ -131,6 +158,7 @@ angular.module('vindexApp')
 		      	});
 		      	if(!exists) {
 		        	$scope.tags.push({label: match});
+		        	VideoFactory.addTag(match);
 		      	}
 	    	});
 	   }
