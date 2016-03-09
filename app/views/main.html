@@ -25,8 +25,8 @@
   </div>
 
   <div class="col-md-4">
-    <select class="form-control" ng-options="video.title for video in videos track by video.index" ng-model="activeVideo" ng-change="setVideo(activeVideo.index)"></select>
-    <stamp-list video-index="currentVideoIndex" api="API" show-tag-details="showTagDetails"></stamp-list>
+    <select class="form-control" ng-options="video.title for video in videos track by video.$id" ng-model="activeVideo" ng-change="setVideo(activeVideo.$id)"></select>
+    <stamp-list video-id="currentVideoId" api="API" show-tag-details="showTagDetails"></stamp-list>
 
   </div>
 
@@ -51,7 +51,7 @@
     <div ng-repeat="video in activeTagStamps">
       <h3>{{video.title}}</h3>
       <div class="stamp" ng-repeat="stamp in video.timestamps | orderBy: 'time'" ng-click="showNotes = ! showNotes">
-        <span class="stamp-time" ng-click="seek(video.index, stamp); $event.stopPropagation()">{{stamp.time}}</span>
+        <span class="stamp-time" ng-click="seek(video.id, stamp); $event.stopPropagation()">{{stamp.time}}</span>
         <span class="show-notes glyphicon glyphicon glyphicon-chevron-down" ng-hide="showNotes || !stamp.notes.length" aria-hidden="true"></span>
         <span class="hide-notes glyphicon glyphicon glyphicon-chevron-up" ng-show="showNotes && stamp.notes.length" aria-hidden="true"></span>
         <stamp-description description="stamp.input" show-tag-details="showTagDetails"></stamp-description>

@@ -13,7 +13,7 @@ angular.module('vindexApp')
 		$scope.API = null;
 		$scope.videos = VideoFactory.videos;
 		$scope.currentTime = 0;
-		$scope.currentVideoIndex = 0;
+		$scope.currentVideoId = 0;
 		$scope.activeTagStamps = null;
 		$scope.activeTag = null;
 		$scope.inputActiveTag = "";
@@ -34,7 +34,8 @@ angular.module('vindexApp')
 		});
 
 	    $scope.videos.$loaded().then(function(result) {
-	      	var key = $scope.videos.$keyAt($scope.currentVideoIndex);
+	      	var key = $scope.videos.$keyAt(0);
+	      	$scope.currentVideoId = key;
 	      	var record = $scope.videos.$getRecord(key);
 			$scope.activeVideo = record;
 			if(!record) {
@@ -71,7 +72,7 @@ angular.module('vindexApp')
 	  	$scope.createStamp = function() {
 	  		if($scope.newStamp.input.length) {
 		    	$scope.newStamp.tags = getMatches($scope.newStamp.input, /@(\w+)/g, 1);
-				VideoFactory.addStamp($scope.currentVideoIndex, $scope.newStamp);
+				VideoFactory.addStamp($scope.currentVideoId, $scope.newStamp);
 				createTag();
 				resetInputs();
 				if($scope.activeTag) { //re-render tag occurences
@@ -85,12 +86,12 @@ angular.module('vindexApp')
   		}
 
 
-  		$scope.seek = function(index, stamp) {
-  			if($scope.currentVideoIndex === index) {
+  		$scope.seek = function(id, stamp) {
+  			if($scope.currentVideoId === id) {
 	      		$scope.API.seekTime(timeStrToSeconds(stamp.time));
 	      		$scope.API.play();
   			}else{
-	  			$scope.setVideo(index);
+	  			$scope.setVideo(id);
   				$timeout(function() {
   					$scope.API.seekTime(timeStrToSeconds(stamp.time));
   					$scope.API.play();
@@ -113,7 +114,7 @@ angular.module('vindexApp')
 				});
 
 				if(stamps.length) {
-					return [ {index: video.index, title: video.title, timestamps: stamps}]
+					return [ {id: video.$id, title: video.title, timestamps: stamps}]
 				}
 				return [];
 
@@ -134,11 +135,11 @@ angular.module('vindexApp')
 			});
 		}
 
-		$scope.setVideo = function(index) {
+		$scope.setVideo = function(id) {
 			$scope.API.stop();
-			$scope.config.sources = $scope.videos.$getRecord($scope.videos.$keyAt(index)).sources;
-			$scope.currentVideoIndex = index;
-			$scope.activeVideo = VideoFactory.videos[$scope.currentVideoIndex];
+			$scope.config.sources = $scope.videos.$getRecord(id).sources;
+			$scope.currentVideoId = id;
+			$scope.activeVideo = $scope.videos.$getRecord(id);
 		};
 
 		function createTag() {

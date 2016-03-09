@@ -16,26 +16,26 @@ angular.module('vindexApp')
     var videos = $firebaseArray(refVideos);
 
     var addVideo = function(title, url, type) {
-        var video = {index: videos.length, title: title, sources: [ { src: url, type: "video/" + type } ], timestamps: [] };
+        var video = {title: title, sources: [ { src: url, type: "video/" + type } ], timestamps: [] };
         videos.$add(video);
     }
 
-    var addStamp = function(index, stamp) {
-      var record = videos.$getRecord(videos.$keyAt(index));
+    var addStamp = function(id, stamp) {
+      var record = videos.$getRecord(id);
       if(!record.timestamps) {
         record.timestamps = [];
       }
       record.timestamps.push(stamp);
-      videos.$save(index);
+      videos.$save(videos.$indexFor(id));
     } 
 
-    var removeStamp = function(index, stamp) {
-      var record = videos.$getRecord(videos.$keyAt(index));
+    var removeStamp = function(id, stamp) {
+      var record = videos.$getRecord(id);
       if(record) {
         var stampIndex = record.timestamps.indexOf(stamp);
         if(stampIndex > -1) {
           record.timestamps.splice(stampIndex, 1);
-          videos.$save(index)
+          videos.$save(videos.$indexFor(id));
         }
       }
     }

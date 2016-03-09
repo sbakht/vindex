@@ -12,7 +12,7 @@ angular.module('vindexApp')
       templateUrl: 'views/templates/stamplist.html',
       restrict: 'E',
       scope : {
-      	videoIndex: "=",
+      	videoId: "=",
       	api: "=",
         showTagDetails: "&"
       },
@@ -27,15 +27,14 @@ angular.module('vindexApp')
           console.log("error: " + error);
         });
 
-        scope.$watch('videoIndex', function(newValue, oldValue) {
+        scope.$watch('videoId', function(newValue, oldValue) {
           if(newValue !== oldValue) {
-            key = videos.$keyAt(scope.videoIndex);
-            scope.video = videos.$getRecord(key);
+            scope.video = videos.$getRecord(scope.videoId);
           }
         }, true);
 
       	scope.remove = function(stamp) {
-      		VideoFactory.removeStamp(scope.videoIndex, stamp);
+      		VideoFactory.removeStamp(scope.videoId, stamp);
       	}
 
       	scope.seek = function(stamp) {
