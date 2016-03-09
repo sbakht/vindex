@@ -31,7 +31,6 @@ angular.module('vindexApp')
 				}
 				i++;
 			}
-			console.log($scope.tags);
 		});
 
 	    $scope.videos.$loaded().then(function(result) {
@@ -136,7 +135,6 @@ angular.module('vindexApp')
 		}
 
 		$scope.setVideo = function(index) {
-			console.log(index);
 			$scope.API.stop();
 			$scope.config.sources = $scope.videos.$getRecord($scope.videos.$keyAt(index)).sources;
 			$scope.currentVideoIndex = index;
