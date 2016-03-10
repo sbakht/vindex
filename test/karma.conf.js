@@ -36,6 +36,7 @@ module.exports = function(config) {
       'bower_components/videogular-buffering/vg-buffering.js',
       'bower_components/videogular-overlay-play/vg-overlay-play.js',
       'bower_components/videogular-poster/vg-poster.js',
+      'bower_components/angular-scroll-glue/src/scrollglue.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       'app/scripts/**/*.js',

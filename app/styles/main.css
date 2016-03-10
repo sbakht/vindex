@@ -93,6 +93,7 @@ body {
   margin-top: 2px;
   padding: 6px;
   cursor: pointer;
+  overflow: hidden;
 }
 
 .stamp:hover {
@@ -162,5 +163,9 @@ p.notes {
 
 #video-stamp-list {
   overflow-y: auto;
-  height: 408px;
+  height: 482px;
+}
+
+.container {
+  width: 100%;
 }

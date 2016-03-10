@@ -22,7 +22,8 @@ angular
     "com.2fdevs.videogular.plugins.poster",
     "cfp.hotkeys",
     "mentio",
-    'firebase'
+    'firebase',
+    'luegg.directives'
   ])
   .config(function ($routeProvider) {
     $routeProvider

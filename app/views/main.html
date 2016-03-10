@@ -33,7 +33,7 @@
 </div>
 
 <div class="row">
-  <div class="col-md-4">
+  <div class="col-md-offset-1 col-md-4">
     <form id="new-stamp" ng-submit="createStamp()">
 
       <div class="input-group">
@@ -45,11 +45,11 @@
     </form>
   </div>
 
-  <div class="col-md-offset-4 col-md-4" id="tag-occurences">
+  <div class="col-md-offset-3 col-md-4" id="tag-occurences">
     <h3>All instances of</h3>
     <input id="input-tag" class="form-control" type="text" ng-model="inputActiveTag" ng-change="showTagDetailsIfIsValidTag()" autocomplete="off" mentio mentio-typed-text="typedTerm"mentio-items="tags | filter:label:typedTerm" />
     <div ng-repeat="video in activeTagStamps">
-      <h3>{{video.title}}</h3>
+      <h4>{{video.title}}</h4>
       <div class="stamp" ng-repeat="stamp in video.timestamps | orderBy: 'time'" ng-click="showNotes = ! showNotes">
         <span class="stamp-time" ng-click="seek(video.id, stamp); $event.stopPropagation()">{{stamp.time}}</span>
         <span class="show-notes glyphicon glyphicon glyphicon-chevron-down" ng-hide="showNotes || !stamp.notes.length" aria-hidden="true"></span>
