@@ -88,11 +88,6 @@ body {
   margin: 6px auto;
 }
 
-#new-stamp {
-  margin-top: 5%;
-}
-
-
 .stamp {
   background-color: #F7F7F7;
   margin-top: 2px;
@@ -167,5 +162,5 @@ p.notes {
 
 #video-stamp-list {
   overflow-y: auto;
-  height: 393px;
+  height: 408px;
 }
