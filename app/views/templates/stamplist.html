@@ -1,4 +1,4 @@
-<div>
+<div id="video-stamp-list">
 	<!-- <h3>{{title}}</h3> -->
 	<div class="stamp" ng-repeat="stamp in video.timestamps | orderBy: 'time'" ng-click="showNotes = ! showNotes">
 		<span class="stamp-time" ng-click="seek(stamp); $event.stopPropagation()">{{stamp.time}}</span>
