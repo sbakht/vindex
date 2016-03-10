@@ -173,35 +173,32 @@ angular.module('vindexApp')
 		}
 
 	  	hotkeys.add({
-		    combo: 'alt+up',
-		    description: '+1 to creating stamp time',
+		    combo: 'alt+left',
+		    description: '-5 to video time',
 		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-		    callback: function() {
-		      var videoLength = $scope.API.totalTime;
-		      var seconds = timeStrToSeconds($scope.newStamp.time) + 1;
-		      if(seconds <= videoLength) {
-		      	$scope.newStamp.time = secondsToTimeStr(seconds);
-		      }
+		    callback: function(event) {
+		  	  event.preventDefault();
+  	          $scope.API.seekTime($scope.currentTime - 5);
+	      	  $scope.API.play();
+		    }
+		});
+	  	hotkeys.add({
+		    combo: 'alt+right',
+		    description: '+5 to video time',
+		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+		    callback: function(event) {
+		  	  event.preventDefault();
+  	          $scope.API.seekTime($scope.currentTime + 5);
+	      	  $scope.API.play();
 		    }
 		});
 
 	  	hotkeys.add({
-		    combo: 'alt+down',
-		    description: '-1 to creating stamp time',
-		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-		    callback: function() {
-		      var seconds = timeStrToSeconds($scope.newStamp.time) - 1;
-		      if(seconds >= 0) {
-		      	$scope.newStamp.time = secondsToTimeStr(seconds);
-		  	  }
-		    }
-		});
-
-	  	hotkeys.add({
-		    combo: 'shift+up',
+		    combo: 'shift+right',
 		    description: '+5 to creating stamp time',
 		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-		    callback: function() {
+		    callback: function(event) {
+	    	event.preventDefault();
 		      var videoLength = $scope.API.totalTime;
 		      var seconds = timeStrToSeconds($scope.newStamp.time) + 5;
 		      if(seconds <= videoLength) {
@@ -211,14 +208,24 @@ angular.module('vindexApp')
 		});
 
 	  	hotkeys.add({
-		    combo: 'shift+down',
+		    combo: 'shift+left',
 		    description: '-5 to creating stamp time',
 		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-		    callback: function() {
+		    callback: function(event) {
+	    	  event.preventDefault();
 		      var seconds = timeStrToSeconds($scope.newStamp.time) - 5;
 		      if(seconds >= 0) {
 		      	$scope.newStamp.time = secondsToTimeStr(seconds);
 		  	  }
+		    }
+		});
+
+	  	hotkeys.add({
+		    combo: 'ctrl+space',
+		    description: 'set creating stamp time to current video time',
+		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
+		    callback: function() {
+		      	$scope.newStamp.time = secondsToTimeStr($scope.currentTime);
 		    }
 		});
 
