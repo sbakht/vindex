@@ -20,6 +20,9 @@ angular.module('vindexApp')
 		$scope.newStamp = { time: "00:00", input: "", notes: ""};
 	    $scope.tags = [];
 
+		initHotkeys();
+	  	initArrayHelpers();
+
 		VideoFactory.tags.$loaded().then(function(result) {
 			var i = 0;
 			while(true) {
@@ -55,7 +58,7 @@ angular.module('vindexApp')
 				};
 			}
 	    }, function(error) {
-	      console.log("error: " + error);
+	      console.log("error loading video: " + error);
 	    });
 
 		$scope.onPlayerReady = function(API) {
@@ -65,7 +68,8 @@ angular.module('vindexApp')
 		$scope.onUpdateTime = function(currentTime, duration) {
 	  		$scope.currentTime = currentTime;
 	  		if($scope.newStamp.input.length === 0) {
-	  			$scope.newStamp.time = secondsToTimeStr(currentTime);
+	  			$scope.newStamp.time = util.
+	  			util.secondsToTimeStr(currentTime);
 	  		}
 		}
 
@@ -82,18 +86,18 @@ angular.module('vindexApp')
 	  	}
 
   	  	function resetInputs() {
-  			$scope.newStamp = {time: secondsToTimeStr($scope.currentTime), input: "", notes: ""};
+  			$scope.newStamp = {time: util.secondsToTimeStr($scope.currentTime), input: "", notes: ""};
   		}
 
 
   		$scope.seek = function(id, stamp) {
   			if($scope.currentVideoId === id) {
-	      		$scope.API.seekTime(timeStrToSeconds(stamp.time));
+	      		$scope.API.seekTime(util.timeStrToSeconds(stamp.time));
 	      		$scope.API.play();
   			}else{
 	  			$scope.setVideo(id);
   				$timeout(function() {
-  					$scope.API.seekTime(timeStrToSeconds(stamp.time));
+  					$scope.API.seekTime(util.timeStrToSeconds(stamp.time));
   					$scope.API.play();
   				}, 50);
 			}
@@ -172,110 +176,117 @@ angular.module('vindexApp')
 			return matches;
 		}
 
-	  	hotkeys.add({
-		    combo: 'alt+left',
-		    description: '-5 to video time',
-		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-		    callback: function(event) {
-		  	  event.preventDefault();
-  	          $scope.API.seekTime($scope.currentTime - 5);
-	      	  $scope.API.play();
-		    }
-		});
-	  	hotkeys.add({
-		    combo: 'alt+right',
-		    description: '+5 to video time',
-		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-		    callback: function(event) {
-		  	  event.preventDefault();
-  	          $scope.API.seekTime($scope.currentTime + 5);
-	      	  $scope.API.play();
-		    }
-		});
 
-	  	hotkeys.add({
-		    combo: 'shift+right',
-		    description: '+5 to creating stamp time',
-		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-		    callback: function(event) {
-	    	event.preventDefault();
-		      var videoLength = $scope.API.totalTime;
-		      var seconds = timeStrToSeconds($scope.newStamp.time) + 5;
-		      if(seconds <= videoLength) {
-		      	$scope.newStamp.time = secondsToTimeStr(seconds);
-		      }
-		    }
-		});
+		var util = {
+		  	secondsToTimeStr: function(time) {
+		  		var seconds = Math.floor(time % 60);
+		  		var minutes = Math.floor(time / 60);
+		  		if(seconds < 10) {
+		  			seconds = "0" + seconds;
+		  		}
+		  		if(minutes < 10) {
+		  			minutes = "0" + minutes;
+		  		}
+		  		return minutes + ":" + seconds; 
+		  	},
+		  	timeStrToSeconds: function(time) {
+		  		var minutes = time.match(/\d+/)[0];
+		  		var seconds = time.match(/\:(\d+)/)[1];
+		  		return parseInt(minutes) * 60 + parseInt(seconds);
+		  	}
+	  	};
 
-	  	hotkeys.add({
-		    combo: 'shift+left',
-		    description: '-5 to creating stamp time',
-		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-		    callback: function(event) {
-	    	  event.preventDefault();
-		      var seconds = timeStrToSeconds($scope.newStamp.time) - 5;
-		      if(seconds >= 0) {
-		      	$scope.newStamp.time = secondsToTimeStr(seconds);
-		  	  }
-		    }
-		});
+	  	function initArrayHelpers() {
+		  	Array.prototype.concatAll = function() {
+				var results = [];
+				this.forEach(function(subArray) {
+					results.push.apply(results, subArray);
+				});
 
-	  	hotkeys.add({
-		    combo: 'ctrl+space',
-		    description: 'set creating stamp time to current video time',
-		    allowIn: ['INPUT', 'SELECT', 'TEXTAREA'],
-		    callback: function() {
-		      	$scope.newStamp.time = secondsToTimeStr($scope.currentTime);
-		    }
-		});
+				return results;
+			};
+			  
+			Array.prototype.filter = function(predicateFunction) {
+				var results = [];
+				this.forEach(function(itemInArray) {
+				  if (predicateFunction(itemInArray)) {
+					results.push(itemInArray);
+				  }
+				});
 
+				return results;
+			};
+			  
+			Array.prototype.map = function(projectionFunction) {
+				var results = [];
+				this.forEach(function(itemInArray) {
+					results.push(projectionFunction(itemInArray));
 
-	  	function secondsToTimeStr(time) {
-	  		var seconds = Math.floor(time % 60);
-	  		var minutes = Math.floor(time / 60);
-	  		if(seconds < 10) {
-	  			seconds = "0" + seconds;
-	  		}
-	  		if(minutes < 10) {
-	  			minutes = "0" + minutes;
-	  		}
-	  		return minutes + ":" + seconds; 
-	  	}
+				});
 
-	  	function timeStrToSeconds(time) {
-	  		var minutes = time.match(/\d+/)[0];
-	  		var seconds = time.match(/\:(\d+)/)[1];
-	  		return parseInt(minutes) * 60 + parseInt(seconds);
-	  	}
+				return results;
+			};
+		}
 
-	  	Array.prototype.concatAll = function() {
-			var results = [];
-			this.forEach(function(subArray) {
-				results.push.apply(results, subArray);
+		function initHotkeys() {
+			var allowIn = ['INPUT', 'SELECT', 'TEXTAREA'];
+		  	hotkeys.add({
+			    combo: 'alt+left',
+			    description: '-5 to video time',
+			    allowIn: allowIn, 
+			    callback: function(event) {
+			  	  event.preventDefault();
+	  	          $scope.API.seekTime($scope.currentTime - 5);
+		      	  $scope.API.play();
+			    }
+			});
+		  	hotkeys.add({
+			    combo: 'alt+right',
+			    description: '+5 to video time',
+			    allowIn: allowIn, 
+			    callback: function(event) {
+			  	  event.preventDefault();
+	  	          $scope.API.seekTime($scope.currentTime + 5);
+		      	  $scope.API.play();
+			    }
 			});
 
-			return results;
-		};
-		  
-		Array.prototype.filter = function(predicateFunction) {
-			var results = [];
-			this.forEach(function(itemInArray) {
-			  if (predicateFunction(itemInArray)) {
-				results.push(itemInArray);
-			  }
+		  	hotkeys.add({
+			    combo: 'shift+right',
+			    description: '+5 to creating stamp time',
+			    allowIn: allowIn, 
+			    callback: function(event) {
+		    	event.preventDefault();
+			      var videoLength = $scope.API.totalTime;
+			      var seconds = util.timeStrToSeconds($scope.newStamp.time) + 5;
+			      if(seconds <= videoLength) {
+			      	$scope.newStamp.time = util.secondsToTimeStr(seconds);
+			      }
+			    }
 			});
 
-			return results;
-		};
-		  
-		Array.prototype.map = function(projectionFunction) {
-			var results = [];
-			this.forEach(function(itemInArray) {
-				results.push(projectionFunction(itemInArray));
-
+		  	hotkeys.add({
+			    combo: 'shift+left',
+			    description: '-5 to creating stamp time',
+			    allowIn: allowIn, 
+			    callback: function(event) {
+		    	  event.preventDefault();
+			      var seconds = util.timeStrToSeconds($scope.newStamp.time) - 5;
+			      if(seconds >= 0) {
+			      	$scope.newStamp.time = util.secondsToTimeStr(seconds);
+			  	  }
+			    }
 			});
 
-			return results;
-		};
+		  	hotkeys.add({
+			    combo: 'ctrl+space',
+			    description: 'set creating stamp time to current video time',
+			    allowIn: allowIn, 
+			    callback: function() {
+			      	$scope.newStamp.time = util.secondsToTimeStr($scope.currentTime);
+			    }
+			});
+
+		}
 
   });
