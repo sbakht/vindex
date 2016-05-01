@@ -73,17 +73,36 @@ angular.module('vindexApp')
 	  		}
 		}
 
-	  	$scope.createStamp = function() {
-	  		if($scope.newStamp.input.length) {
-		    	$scope.newStamp.tags = getMatches($scope.newStamp.input, /@(\w+)/g, 1);
-				VideoFactory.addStamp($scope.currentVideoId, $scope.newStamp);
-				createTag();
-				resetInputs();
-				if($scope.activeTag) { //re-render tag occurences
-					$scope.showTagDetails($scope.activeTag);
+	  	$scope.createStamp = (function() {
+
+			function addNewTags(tags) {
+	  			tags.filter( tag => isNewTag(tag) ).map( tag => addTag(tag) );
+		    }
+
+		    function isNewTag(tag) {
+		      	return !$scope.tags.some( item => tag === item.label );
+		    }
+
+		    function addTag(tag) {
+	        	$scope.tags.push({label: tag});
+	        	VideoFactory.addTag(tag);
+		    }
+
+	  		return function() {
+		  		var stamp = $scope.newStamp;
+		  		if(stamp.input.length > 0) {
+			    	stamp.tags = util.getMatches(stamp.input, /@(\w+)/g, 1);
+					VideoFactory.addStamp($scope.currentVideoId, stamp);
+
+					addNewTags(stamp.tags);
+
+					resetInputs();
+					if($scope.activeTag) { //re-render tag occurences
+						$scope.showTagDetails($scope.activeTag);
+					}
 				}
 			}
-	  	}
+	  	})()
 
   	  	function resetInputs() {
   			$scope.newStamp = {time: util.secondsToTimeStr($scope.currentTime), input: "", notes: ""};
@@ -146,36 +165,6 @@ angular.module('vindexApp')
 			$scope.activeVideo = $scope.videos.$getRecord(id);
 		};
 
-		function createTag() {
-		    var regex = /@(\w+)/g;
-		    var matches = getMatches($scope.newStamp.input, regex, 1)
-		    var match;
-		    var exists;
-	    	matches.forEach(function(match) {
-	      		exists = false;
-	      		$scope.tags.forEach(function(p) {
-		        if(p.label == match) {
-		            exists = true;
-		            return;
-		        }
-		      	});
-		      	if(!exists) {
-		        	$scope.tags.push({label: match});
-		        	VideoFactory.addTag(match);
-		      	}
-	    	});
-	   }
-  
-		function getMatches(string, regex, index) {
-			index || (index = 1); // default to the first capturing group
-		    var matches = [];
-	   	    var match;
-			while (match = regex.exec(string)) {
-			    matches.push(match[index]);
-			}
-			return matches;
-		}
-
 
 		var util = {
 		  	secondsToTimeStr: function(time) {
@@ -193,7 +182,16 @@ angular.module('vindexApp')
 		  		var minutes = time.match(/\d+/)[0];
 		  		var seconds = time.match(/\:(\d+)/)[1];
 		  		return parseInt(minutes) * 60 + parseInt(seconds);
-		  	}
+		  	},
+		  	getMatches: function(string, regex, index) {
+				index || (index = 1); // default to the first capturing group
+			    var matches = [];
+		   	    var match;
+				while (match = regex.exec(string)) {
+				    matches.push(match[index]);
+				}
+				return matches;
+			}
 	  	};
 
 	  	function initArrayHelpers() {
@@ -201,17 +199,6 @@ angular.module('vindexApp')
 				var results = [];
 				this.forEach(function(subArray) {
 					results.push.apply(results, subArray);
-				});
-
-				return results;
-			};
-			  
-			Array.prototype.filter = function(predicateFunction) {
-				var results = [];
-				this.forEach(function(itemInArray) {
-				  if (predicateFunction(itemInArray)) {
-					results.push(itemInArray);
-				  }
 				});
 
 				return results;
