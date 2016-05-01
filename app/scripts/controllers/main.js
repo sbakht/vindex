@@ -23,6 +23,34 @@ angular.module('vindexApp')
 		initHotkeys();
 	  	initArrayHelpers();
 
+		var util = {
+		  	secondsToTimeStr: function(time) {
+		  		var seconds = Math.floor(time % 60);
+		  		var minutes = Math.floor(time / 60);
+		  		if(seconds < 10) {
+		  			seconds = "0" + seconds;
+		  		}
+		  		if(minutes < 10) {
+		  			minutes = "0" + minutes;
+		  		}
+		  		return minutes + ":" + seconds; 
+		  	},
+		  	timeStrToSeconds: function(time) {
+		  		var minutes = time.match(/\d+/)[0];
+		  		var seconds = time.match(/\:(\d+)/)[1];
+		  		return parseInt(minutes) * 60 + parseInt(seconds);
+		  	},
+		  	getMatches: function(string, regex, index) {
+				index || (index = 1); // default to the first capturing group
+			    var matches = [];
+		   	    var match;
+				while (match = regex.exec(string)) {
+				    matches.push(match[index]);
+				}
+				return matches;
+			}
+	  	};
+
 		VideoFactory.tags.$loaded().then(function(result) {
 			var i = 0;
 			while(true) {
@@ -88,25 +116,24 @@ angular.module('vindexApp')
 	        	VideoFactory.addTag(tag);
 		    }
 
+		  	function clearInput() {
+				$scope.newStamp = {time: util.secondsToTimeStr($scope.currentTime), input: "", notes: ""};
+			}
+
 	  		return function() {
-		  		var stamp = $scope.newStamp;
-		  		if(stamp.input.length > 0) {
+		  		[$scope.newStamp].filter(stamp => !!stamp.input.length).map(function(stamp) {
 			    	stamp.tags = util.getMatches(stamp.input, /@(\w+)/g, 1);
+
 					VideoFactory.addStamp($scope.currentVideoId, stamp);
-
 					addNewTags(stamp.tags);
+					clearInput();
 
-					resetInputs();
 					if($scope.activeTag) { //re-render tag occurences
 						$scope.showTagDetails($scope.activeTag);
 					}
-				}
+				});
 			}
 	  	})()
-
-  	  	function resetInputs() {
-  			$scope.newStamp = {time: util.secondsToTimeStr($scope.currentTime), input: "", notes: ""};
-  		}
 
 
   		$scope.seek = function(id, stamp) {
@@ -118,9 +145,17 @@ angular.module('vindexApp')
   				$timeout(function() {
   					$scope.API.seekTime(util.timeStrToSeconds(stamp.time));
   					$scope.API.play();
-  				}, 50);
+  				}, 0);
 			}
   		}
+
+		$scope.setVideo = function(id) {
+			$scope.API.stop();
+			var record = $scope.videos.$getRecord(id)
+			$scope.config.sources = record.sources;
+			$scope.currentVideoId = id;
+			$scope.activeVideo = record;
+		};
 
 		$scope.showTagDetails = function(tag) {
 			$scope.activeTag = tag;
@@ -145,7 +180,6 @@ angular.module('vindexApp')
 		}
 
 		$scope.showTagDetailsIfIsValidTag = function() {
-			// $scope.inputActiveTag = $scope.inputActiveTag.substring(1); //remove @
 			var temp = $scope.inputActiveTag;
 			if(temp[0] === "@") {
 				temp = temp.substring(1);
@@ -158,41 +192,6 @@ angular.module('vindexApp')
 			});
 		}
 
-		$scope.setVideo = function(id) {
-			$scope.API.stop();
-			$scope.config.sources = $scope.videos.$getRecord(id).sources;
-			$scope.currentVideoId = id;
-			$scope.activeVideo = $scope.videos.$getRecord(id);
-		};
-
-
-		var util = {
-		  	secondsToTimeStr: function(time) {
-		  		var seconds = Math.floor(time % 60);
-		  		var minutes = Math.floor(time / 60);
-		  		if(seconds < 10) {
-		  			seconds = "0" + seconds;
-		  		}
-		  		if(minutes < 10) {
-		  			minutes = "0" + minutes;
-		  		}
-		  		return minutes + ":" + seconds; 
-		  	},
-		  	timeStrToSeconds: function(time) {
-		  		var minutes = time.match(/\d+/)[0];
-		  		var seconds = time.match(/\:(\d+)/)[1];
-		  		return parseInt(minutes) * 60 + parseInt(seconds);
-		  	},
-		  	getMatches: function(string, regex, index) {
-				index || (index = 1); // default to the first capturing group
-			    var matches = [];
-		   	    var match;
-				while (match = regex.exec(string)) {
-				    matches.push(match[index]);
-				}
-				return matches;
-			}
-	  	};
 
 	  	function initArrayHelpers() {
 		  	Array.prototype.concatAll = function() {
