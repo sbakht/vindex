@@ -1,0 +1,171 @@
+.browsehappy {
+  margin: 0.2em 0;
+  background: #ccc;
+  color: #000;
+  padding: 0.2em 0;
+}
+
+body {
+  padding: 0;
+}
+
+/* Everything but the jumbotron gets side spacing for mobile first views */
+.header,
+.marketing,
+.footer {
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+/* Custom page header */
+.header {
+  border-bottom: 1px solid #e5e5e5;
+  margin-bottom: 10px;
+}
+/* Make the masthead heading the same height as the navigation */
+.header h3 {
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 40px;
+  padding-bottom: 19px;
+}
+
+/* Custom page footer */
+.footer {
+  padding-top: 19px;
+  color: #777;
+  border-top: 1px solid #e5e5e5;
+}
+
+.container-narrow > hr {
+  margin: 30px 0;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  border-bottom: 1px solid #e5e5e5;
+}
+.jumbotron .btn {
+  font-size: 21px;
+  padding: 14px 24px;
+}
+
+/* Supporting marketing content */
+.marketing {
+  margin: 40px 0;
+}
+.marketing p + h4 {
+  margin-top: 28px;
+}
+
+/* Responsive: Portrait tablets and up */
+@media screen and (min-width: 768px) {
+  .container {
+    /*max-width: 730px;*/
+  }
+
+  /* Remove the padding we set earlier */
+  .header,
+  .marketing,
+  .footer {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  /* Space out the masthead */
+  .header {
+    margin-bottom: 30px;
+  }
+  /* Remove the bottom border on the jumbotron for visual effect */
+  .jumbotron {
+    border-bottom: 0;
+  }
+}
+
+
+#new-stamp-submit {
+  display: block;
+  margin: 6px auto;
+}
+
+.stamp {
+  background-color: #F7F7F7;
+  margin-top: 2px;
+  padding: 6px;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.stamp:hover {
+  background-color:#EAEAF8;
+}
+
+.stamp:hover .delete {
+  display:block;
+}
+
+.stamp .delete {
+  display:none;
+  float:right;
+  font-size: 1.1em;
+  cursor: pointer;
+}
+
+.stamp-time, .tag{
+  color:blue;
+  cursor: pointer;
+}
+
+.stamp-input {
+  float:right;
+  padding-right:10px;
+}
+
+#no-stamps, #hint {
+  font-style: italic;
+}
+
+h3 {
+  margin-top: 0;
+}
+
+#tag-occurences h3 {
+  display: inline-block;
+}
+
+#tag-occurences #input-tag {
+  border: 1px solid rgba(105, 98, 98, 0.22);
+  display: inline-block;
+  font-size: 24px;
+  width:50%;
+}
+
+select {
+  font-size: 24px;
+  height: 44px;
+}
+
+p.notes {
+  white-space:pre-wrap;
+}
+
+.show-notes, .hide-notes {
+  float:right;
+}
+
+
+@font-face {
+  font-family: 'videogular';
+  src: url("fonts/videogular.eot");
+  src: url("fonts/videogular.eot?#iefix") format("embedded-opentype"), url("fonts/videogular.woff") format("woff"), url("fonts/videogular.ttf") format("truetype"), url("fonts/videogular.svg#videogular") format("svg");
+  font-weight: normal;
+  font-style: normal; }
+
+#video-stamp-list {
+  overflow-y: auto;
+  height: 482px;
+}
+
+.container {
+  width: 100%;
+}
